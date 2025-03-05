@@ -1,4 +1,4 @@
-# qe
+# qm
 Quick Manager
 
 A Simple file explorer written in C.
