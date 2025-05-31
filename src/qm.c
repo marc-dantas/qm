@@ -113,12 +113,9 @@ void draw(Instance* inst) {
 }
 
 int main(int argc, char** argv) {
-	if (argc < 2) {
-		usage(argv[0]);
-		fprintf(stderr, "qm: error: expected positional argument PATH\n");
-		return 255;
-	}
-	char* path = argv[1];
+	char p[1024];
+	getcwd(p, sizeof(p));
+	char* path = argc >= 2 ? argv[1] : p;
 	Instance inst = {0};
 	if (Instance_new(&inst, path) != 0) return 255;
 	chdir(path);
