@@ -1,5 +1,6 @@
 #include <dirent.h> 
-#include <stdio.h> 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
@@ -159,6 +160,20 @@ int main(int argc, char** argv) {
 		case 's':
 			if (inst.selection+1 < inst.len) {
 				inst.selection += 1;
+			}
+			break;
+		case ' ':
+		case '\n':
+			if (inst.selection >= inst.dlen) {
+				char* filename = inst.files[inst.selection - inst.dlen];
+				printf(CYAN"Program to launch with '"RESET C_FILE_SEL"%s"RESET CYAN"'"RESET": ", filename);
+				char program[64];
+				fgets(program, 64, stdin);
+				program[strcspn(program, "\n")] = 0;
+				char cmd[255];
+				sprintf(cmd, "%s \"%s\"", program, filename);
+				system(cmd);
+				return 0;
 			}
 			break;
 		case 'q':
