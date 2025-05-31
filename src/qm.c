@@ -172,8 +172,8 @@ int main(int argc, char** argv) {
 				program[strcspn(program, "\n")] = 0;
 				char cmd[255];
 				sprintf(cmd, "%s \"%s\"", program, filename);
+				reset();
 				system(cmd);
-				return 0;
 			}
 			break;
 		case 'q':
