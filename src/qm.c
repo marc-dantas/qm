@@ -139,15 +139,19 @@ int main(int argc, char** argv) {
 	        break;
 		case 'h':
 			reset();
-			printf("["PURPLE"HELP"RESET"]\n");
-			printf("  ["RED"Q"RESET"] "UNDER"Quit application"RESET"\n");
-			printf("  ["RED"W"RESET"] "UNDER"Navigate up"RESET"\n");
-			printf("  ["RED"S"RESET"] "UNDER"Navigate down"RESET"\n");
-			printf("  ["RED"D"RESET"] "UNDER"Enter folder under selection"RESET"\n");
-			printf("  ["RED"A"RESET"] "UNDER"Go back"RESET"\n\n");
-			
-			printf(UNDER"(c) 2025 Marcio Dantas"RESET"\n\n");
-			
+			printf(PURPLE"HELP"RESET"\n");
+			printf("  - "CYAN"Navigation"RESET":\n");
+			printf("      ["RED"W"RESET"] Move selection up\n");
+			printf("      ["RED"A"RESET"] Go back\n");
+			printf("      ["RED"S"RESET"] Move selection down\n");
+			printf("      ["RED"D"RESET"] Enter folder under selection\n");
+			printf("  - "CYAN"Application"RESET":\n");
+			printf("      ["RED"Q"RESET"] Quit application\n");
+			printf("      ["RED"H"RESET"] Show this help message\n");
+			printf("  - "CYAN"Utility"RESET":\n");
+			printf("      ["RED"ENTER"RESET"] Launch desired application with selected file\n");
+
+			printf(UNDER"\n(c) 2025 Marcio Dantas"RESET"\n");
 			printf(ITAL"Press any key to continue..."RESET"\n");
 			readchar();
 			break;
