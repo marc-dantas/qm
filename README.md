@@ -37,13 +37,13 @@ At the top of the source code there are some configuration constants that you wo
 modify to your needs. 
 
 ## Tutorial
-Use `[W]` and `[S]` to navigate up or down, respectively.
+Use `[H]` to show Help message.
 
-Use `[D]` to go into the folder currently selected.
-
-Use `[A]` to go back (the same as going into `..` directory)
-
-Press `[H]` to show Help message.
+### Commands
+- Press `[W]` and `[S]` to navigate up or down, respectively.
+- Press `[D]` to go into the folder currently selected.
+- Press `[A]` to go back (the same as going into `..` directory).
+- Press `[SPACE]` or `[ENTER]` to try to launch a program with the selected file.
 
 ---
 
