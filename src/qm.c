@@ -149,7 +149,9 @@ int main(int argc, char** argv) {
 			printf("      ["RED"Q"RESET"] Quit application\n");
 			printf("      ["RED"H"RESET"] Show this help message\n");
 			printf("  - "CYAN"Utility"RESET":\n");
+			printf("      ["RED"R"RESET"] Run an arbitrary terminal command\n");
 			printf("      ["RED"ENTER"RESET"] Launch desired application with selected file\n");
+
 
 			printf(UNDER"\n(c) 2025 Marcio Dantas"RESET"\n");
 			printf(ITAL"Press any key to continue..."RESET"\n");

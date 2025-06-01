@@ -43,7 +43,8 @@ Use `[H]` to show Help message.
 - Press `[W]` and `[S]` to navigate up or down, respectively.
 - Press `[D]` to go into the folder currently selected.
 - Press `[A]` to go back (the same as going into `..` directory).
-- Press `[SPACE]` or `[ENTER]` to try to launch a program with the selected file.
+- Press `[ENTER]` to try to launch a program with the selected file.
+- Press `[R]` to execute a terminal command in the current directory.
 
 ---
 
