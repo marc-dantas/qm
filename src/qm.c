@@ -178,7 +178,19 @@ int main(int argc, char** argv) {
 				sprintf(cmd, "%s \"%s\"", program, filename);
 				reset();
 				system(cmd);
+				printf(ITAL"\nPress any key to continue..."RESET"\n");
+				readchar();
 			}
+			break;
+		case 'r':
+			printf(CYAN"Run"RESET": ");
+			char cmd[255];
+			fgets(cmd, 255, stdin);
+			cmd[strcspn(cmd, "\n")] = 0;
+			reset();
+			system(cmd);
+			printf(ITAL"\nPress any key to continue..."RESET"\n");
+			readchar();
 			break;
 		case 'q':
 			reset();
