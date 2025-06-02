@@ -34,6 +34,10 @@ void usage(char* program) {
 	fprintf(stderr, "qm: usage: %s PATH\n", program);	
 }
 
+int cmpstringp(const void* p1, const void* p2) {
+    return strcmp(*(const char**)p1, *(const char**)p2);
+}
+
 int Instance_new(Instance* target, char* path) {
 	DIR* d = opendir(path);
 	if (d == NULL) {
@@ -54,6 +58,11 @@ int Instance_new(Instance* target, char* path) {
 			target->flen += 1;
 		}
 	}
+	closedir(d);
+
+	qsort(target->dirs, target->dlen, sizeof(char*), cmpstringp);
+    qsort(target->files, target->flen, sizeof(char*), cmpstringp);
+
 	target->len = target->flen + target->dlen;
 	target->selection = 0;
 	return 0;
