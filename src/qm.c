@@ -12,6 +12,7 @@
 #define UNDER  "\x1B[4m"
 #define CYAN   "\x1B[36m"
 #define ITAL   "\x1B[3m"
+#define GRAY   "\x1B[0;30m"
 
 #define C_DIR      "\x1B[0;36m" // Color applied to directory names  
 #define C_DIR_SEL  "\x1B[4;36m" // Color applied to selected directory  
@@ -89,6 +90,11 @@ void draw(Instance* inst) {
 	char p[1024];
 	getcwd(p, sizeof(p));
 	printf(PURPLE"%s"RESET"\n\n", p);
+	printf(CYAN"  %d directories"RESET"\t", inst->dlen);
+	if (inst->flen == 0)      printf(CYAN"\tno files"RESET"\n");
+	else if (inst->flen == 1) printf(CYAN"\t%d file"RESET"\n", inst->flen);		
+	else                      printf(CYAN"\t%d files"RESET"\n", inst->flen);
+	printf("\n");
 
 	int window = ROLLING_WINDOW_SIZE;
 	int start = inst->selection - (window / 2);
@@ -102,8 +108,9 @@ void draw(Instance* inst) {
 
 	// Render directories
 	for (int i = start; i < inst->dlen && render_count < window; i++) {
-		if (inst->selection == i) printf("  > "C_DIR_SEL"%s"RESET"/", inst->dirs[i]);
-		else                      printf("    "C_DIR"%s"RESET"/", inst->dirs[i]);
+		printf(" "GRAY"|"RESET"\t");
+		if (inst->selection == i) printf("> "C_DIR_SEL"%s"RESET"/", inst->dirs[i]);
+		else                      printf("  "C_DIR"%s"RESET"/", inst->dirs[i]);
 		printf("\n");
 		render_count++;
 	}
@@ -112,8 +119,9 @@ void draw(Instance* inst) {
 	for (int i = 0; i < inst->flen && render_count < window; i++) {
 		int file_index = inst->dlen + i;
 		if (file_index >= start) {
-			if (inst->selection == file_index) printf("  > "C_FILE_SEL"%s"RESET, inst->files[i]);
-			else                               printf("    "C_FILE"%s"RESET, inst->files[i]);
+			printf(" "GRAY"|"RESET"\t");
+			if (inst->selection == file_index) printf("> "C_FILE_SEL"%s"RESET, inst->files[i]);
+			else                               printf("  "C_FILE"%s"RESET, inst->files[i]);
 			printf("\n");
 			render_count++;
 		}
