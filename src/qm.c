@@ -46,26 +46,16 @@ typedef struct {
 	Item items[MAX_ITEMS];
 	int len, flen, dlen;
 	int selection;
-} Instance;
-
-// typedef struct {
-// 	char* dirs[MAX_ITEMS];
-// 	char* files[MAX_ITEMS];
-// 	int dlen, flen, len, selection;
-// } Instance;
+} qm_Instance;
 
 void usage(char* program) {
 	fprintf(stderr, "qm: usage: %s [PATH]\n", program);	
 }
 
-int cmpstringp(const void* p1, const void* p2) {
-    return strcmp(*(const char**)p1, *(const char**)p2);
-}
-
 char readchar();
 void reset();
 
-int Instance_new(Instance* target, char* path) {
+int qm_open(qm_Instance* target, char* path) {
 	DIR* d = opendir(path);
 	if (d == NULL) {
 		reset();
@@ -88,6 +78,7 @@ int Instance_new(Instance* target, char* path) {
 		i.name[MAX_FILENAME_LEN] = '\0';
 		i.type = (dir->d_type == DT_DIR) ? ITEM_DIR : ITEM_FILE;
 		i.hidden = *dir->d_name == '.';
+
 
 		target->items[target->len] = i;
 		target->len += 1;
@@ -114,7 +105,7 @@ char readchar() {
     return ch;
 }
 
-void draw(Instance* inst) {
+void qm_draw(qm_Instance* inst) {
 	char p[260];
 	getcwd(p, sizeof(p));
 	printf(PURPLE"%s"RESET"\n\n", p);
@@ -158,12 +149,13 @@ int main(int argc, char** argv) {
 	char p[1024];
 	getcwd(p, sizeof(p));
 	char* path = argc >= 2 ? argv[1] : p;
-	Instance inst = {0};
-	if (Instance_new(&inst, path) != 0) return 255;
+
+	qm_Instance inst = {0};
+	if (qm_open(&inst, path) != 0) return 255;
 	chdir(path);
 	for (;;) {
 		reset();
-		draw(&inst);
+		qm_draw(&inst);
 		switch (readchar()) {
 		case 'w':
 			if (inst.selection > 0) {
@@ -173,7 +165,7 @@ int main(int argc, char** argv) {
 		case 'd':
 		    if (inst.items[inst.selection].type == ITEM_DIR) {
 				path = inst.items[inst.selection].name;
-	            if (Instance_new(&inst, path) == 0) {
+	            if (qm_open(&inst, path) == 0) {
 	                chdir(path);
 	            }
 	        }
@@ -192,14 +184,13 @@ int main(int argc, char** argv) {
 			printf("  - "CYAN"Utility"RESET":\n");
 			printf("      ["RED"R"RESET"] Run an arbitrary terminal command\n");
 			printf("      ["RED"ENTER"RESET"] Launch desired application with selected file\n");
-
 			printf(UNDER"\n(c) 2025 Marcio Dantas"RESET"\n");
 			printf(ITAL"Press any key to continue..."RESET"\n");
 			readchar();
 			break;
 		case 'a':
 			path = "..";
-            if (Instance_new(&inst, path) == 0) {
+            if (qm_open(&inst, path) == 0) {
                 chdir(path);
             }
 			break;
