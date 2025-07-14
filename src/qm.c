@@ -42,7 +42,7 @@ typedef struct {
 } Item;
 
 typedef struct {
-	char* path;
+	char path[260];
 	Item items[MAX_ITEMS];
 	int len, flen, dlen;
 	int selection;
@@ -84,6 +84,17 @@ int qm_open(qm_Instance* target, char* path) {
 		target->len += 1;
 	}
 	target->selection = 0;
+	char* resolved_path = realpath(path, NULL);
+	if (!resolved_path) {
+	    reset();
+	    fprintf(stderr, RED"qm: error: could not resolve realpath for \"%s\"\n"RESET, path);
+	    readchar();
+	    closedir(d);
+	    return 255;
+	}
+	strncpy(target->path, resolved_path, sizeof(target->path) - 1);
+	target->path[sizeof(target->path) - 1] = '\0'; // null-terminate just in case
+	free(resolved_path);
 	closedir(d);
 	return 0;
 }
@@ -106,9 +117,7 @@ char readchar() {
 }
 
 void qm_draw(qm_Instance* inst) {
-	char p[260];
-	getcwd(p, sizeof(p));
-	printf(PURPLE"%s"RESET"\n\n", p);
+	printf(PURPLE"%s"RESET"\n\n", inst->path);
 	printf(CYAN"\t%d directories"RESET, inst->dlen);
 	if (inst->flen == 0)      printf(CYAN"\tno files"RESET"\n");
 	else if (inst->flen == 1) printf(CYAN"\t%d file"RESET"\n", inst->flen);		
@@ -145,6 +154,14 @@ void qm_draw(qm_Instance* inst) {
 	if (start + window < inst->len) printf(GRAY" +\t"PURPLE"..."RESET"\n");
 }
 
+void qm_enter(qm_Instance* target, char* path) {
+	char new_path[260];
+    snprintf(new_path, sizeof(new_path), "%s/%s", target->path, path);
+    if (qm_open(target, new_path) == 0) {
+        chdir(new_path);
+    }
+}
+
 int main(int argc, char** argv) {
 	char p[1024];
 	getcwd(p, sizeof(p));
@@ -164,10 +181,7 @@ int main(int argc, char** argv) {
 			break;
 		case 'd':
 		    if (inst.items[inst.selection].type == ITEM_DIR) {
-				path = inst.items[inst.selection].name;
-	            if (qm_open(&inst, path) == 0) {
-	                chdir(path);
-	            }
+				qm_enter(&inst, inst.items[inst.selection].name);
 	        }
 	        break;
 		case 'h':
@@ -189,10 +203,7 @@ int main(int argc, char** argv) {
 			readchar();
 			break;
 		case 'a':
-			path = "..";
-            if (qm_open(&inst, path) == 0) {
-                chdir(path);
-            }
+			qm_enter(&inst, "..");
 			break;
 		case 's':
 			if (inst.selection+1 < inst.len) {
