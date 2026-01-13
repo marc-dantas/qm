@@ -1,6 +1,8 @@
 # qm
 quick manager
 
+![qm screenshot](./screenshot.png)
+
 ## Getting started
 qm is a simple terminal file manager written in Go.
 
