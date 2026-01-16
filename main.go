@@ -71,7 +71,6 @@ func trace_error(message string) {
 	fmt.Printf("%serror%s: %s\n", RED, RESET, message)
 	fmt.Printf("%sPress any key to continue...%s\n", ITAL, RESET)
 	getchar()
-	
 }
 
 func ls(path string) []Entry {
@@ -139,6 +138,16 @@ func main() {
 		PrintEntries(entries, cursor, 10)
 		c := getchar();
 		switch c {
+			case 'r':
+				if len(entries) > 0 {
+					var renamed string
+					fmt.Printf("%srename%s: ", BLUE, RESET)
+					fmt.Scanln(&renamed)
+					oldPath := filepath.Join(absPath, entries[cursor].Name)
+					newPath := filepath.Join(absPath, renamed)
+					os.Rename(oldPath, newPath)
+					entries = ls(absPath);
+				}
 			case 'q':
 				clear()
 				return
