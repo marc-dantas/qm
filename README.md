@@ -20,5 +20,6 @@ Basic usage of qm:
 - `S` select item below cursor
 - `A` go to parent directory
 - `D` go inside selected directory
+- `R` rename the selected file/directory
 - `[SPACE]` execute command with selected file
 - _more actions coming soon_...
