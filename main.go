@@ -141,12 +141,26 @@ func main() {
 			case 'r':
 				if len(entries) > 0 {
 					var renamed string
-					fmt.Printf("%srename%s: ", BLUE, RESET)
+					fmt.Printf("[rename item] %snew name%s: ", BLUE, RESET)
 					fmt.Scanln(&renamed)
 					oldPath := filepath.Join(absPath, entries[cursor].Name)
 					newPath := filepath.Join(absPath, renamed)
 					os.Rename(oldPath, newPath)
 					entries = ls(absPath);
+				}
+			case 'x':
+				if len(entries) > 0 {
+					fmt.Printf("[delete item] %sare you sure?%s (y/N): ", RED, RESET)
+					opt := getchar()
+					if opt == 'y' || opt == 'Y' {
+						path := filepath.Join(absPath, entries[cursor].Name)
+						err := os.Remove(path)
+						if err != nil {
+							trace_error(fmt.Sprintf("could not remove item: %v", err))
+						} else {
+							entries = ls(absPath);
+						}
+					}
 				}
 			case 'q':
 				clear()
