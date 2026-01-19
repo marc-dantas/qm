@@ -14,6 +14,12 @@ type Entry struct {
 	IsDir bool
 }
 
+type Move struct {
+	Name string
+	Parent string
+	Active bool
+}
+
 func CountDirs(entries []Entry) int {
 	count := 0
 	for _, item := range entries {
@@ -125,6 +131,8 @@ func main() {
 	cursor := 0;
 
 	entries := ls(path);
+	move := Move{Name: "", Parent: "", Active: false}
+
 	for {
 		clear();
 		
@@ -136,6 +144,9 @@ func main() {
 		fmt.Printf("    %s%d directories\t%d files%s\n", GREEN, CountDirs(entries), CountFiles(entries), RESET)
 
 		PrintEntries(entries, cursor, 10)
+		if move.Active {
+			fmt.Printf("[move item] %s%s%s", BLUE, move.Name, RESET)
+		}
 		c := getchar();
 		switch c {
 			case 'r':
@@ -148,13 +159,26 @@ func main() {
 					os.Rename(oldPath, newPath)
 					entries = ls(absPath);
 				}
+			case 'm':
+				if move.Active {
+					originalPath := filepath.Join(move.Parent, move.Name)
+					movedPath := filepath.Join(absPath, move.Name)
+					os.Rename(originalPath, movedPath)
+					entries = ls(absPath);
+					move.Active = false;
+				} else {
+					move.Active = true;
+					move.Parent = absPath
+					move.Name = entries[cursor].Name
+				}
 			case 'x':
 				if len(entries) > 0 {
+					var err error
 					fmt.Printf("[delete item] %sare you sure?%s (y/N): ", RED, RESET)
-					opt := getchar()
-					if opt == 'y' || opt == 'Y' {
+					sure := getchar()
+					if sure == 'y' || sure == 'Y' {
 						path := filepath.Join(absPath, entries[cursor].Name)
-						err := os.Remove(path)
+						err = os.RemoveAll(path)
 						if err != nil {
 							trace_error(fmt.Sprintf("could not remove item: %v", err))
 						} else {
