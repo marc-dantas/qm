@@ -16,10 +16,16 @@ $ go build
 ## Usage
 Basic usage of qm:
 
+### Navigation
 - `W` select item above cursor
 - `S` select item below cursor
 - `A` go to parent directory
 - `D` go inside selected directory
-- `R` rename the selected file/directory
+- `Q` exit qm
+
+### File Management
+- `R` rename the selected item
+- `X` delete the selected item permanently
+- `M` press to set the selected file to _move mode_.
+      Then, navigate to where you want to move the file and press `M` again
 - `[SPACE]` execute command with selected file
-- _more actions coming soon_...
